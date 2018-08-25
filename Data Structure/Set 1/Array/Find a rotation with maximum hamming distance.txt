@@ -1,0 +1,36 @@
+class GFG 
+{
+static int maxHamming(int arr[], int n)	// Return the maximum hamming distance of a rotation
+{
+    int brr[]=new int[2 *n + 1];		// arr[] to brr[] two times so that we can traverse through all rotations.
+    for (int i = 0; i < n; i++)
+        brr[i] = arr[i];
+    for (int i = 0; i < n; i++) 
+        brr[n+i] = arr[i];
+ 
+    int maxHam = 0; 		// We know hamming distance with  0 rotation would be 0.
+    for (int i = 1; i < n; i++)	 // We try other rotations one by one and compute Hamming distance of every rotation
+    {
+        int currHam = 0;
+        for (int j = i, k=0; j < (i + n); j++,
+                                          k++) 
+            if (brr[j] != arr[k])
+                currHam++;
+
+        if (currHam == n)
+            return n;
+ 
+        maxHam = Math.max(maxHam, currHam);
+    }
+ 
+    return maxHam;
+} 
+ 
+public static void main (String[] args)
+{
+    int arr[] = {2, 4, 6, 8}; 
+    int n = arr.length;
+    System.out.print(maxHamming(arr, n));     
+}
+}
+ 
