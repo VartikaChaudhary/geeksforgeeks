@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {		// A binary tree node has data, pointer to left child and a pointer to right child
+    int data;
+    struct Node* left;
+    struct Node* right;
+};
+ 
+struct Node* newNode(int data)		// Helper function that allocates a new node with the given data and NULL left and right pointers.
+{
+    struct Node* node = (struct Node*)malloc(sizeof(struct Node));
+    node->data = data;
+    node->left = NULL;
+    node->right = NULL;
+    return (node);
+}
+ 
+void NthInorder(struct Node* node, int n)		// Given a binary tree, print its nth nodes of inorder
+{
+    static int count = 0;
+    if (node == NULL)
+        return;
+    if (count <= n) {
+        NthInorder(node->left, n);		// first recur on left child
+        count++;
+        if (count == n)			// when count = n then print element
+            printf("%d ", node->data);
+        NthInorder(node->right, n);		// now recur on right child
+    }
+}
+ 
+int main()
+{
+    struct Node* root = newNode(10);
+    root->left = newNode(20);
+    root->right = newNode(30);
+    root->left->left = newNode(40);
+    root->left->right = newNode(50);
+ 
+    int n = 4;
+ 
+    NthInorder(root, n);
+    return 0;
+}
