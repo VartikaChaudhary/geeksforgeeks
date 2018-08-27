@@ -1,0 +1,45 @@
+import java.util.Stack;
+class Node
+{
+    int data;
+    Node left, right;
+    public Node(int item)
+    {
+        data = item;
+        left = right = null;
+    }
+}
+ 
+class BinaryTree		// Class to print the inorder traversal 
+{
+    Node root;
+    void inorder()
+    {
+        if (root == null)
+            return;
+        Stack s = new Stack();
+        Node curr = root;
+        while (curr != null || s.size() > 0)		       // traverse the tree
+        {
+            while (curr !=  null)		// Reach the left most Node of the curr Node
+            {
+                s.push(curr);		// place pointer to a tree node on the stack before traversing the node's left subtree
+                curr = curr.left;
+            }
+            curr = s.pop();		           // Current must be NULL at this point
+            System.out.print(curr.data + " ");
+            curr = curr.right;		// we have visited the node and its left subtree.  Now, it's right subtree's turn
+        }
+    }
+ 
+    public static void main(String args[])
+    {
+        BinaryTree tree = new BinaryTree();
+        tree.root = new Node(1);
+        tree.root.left = new Node(2);
+        tree.root.right = new Node(3);
+        tree.root.left.left = new Node(4);
+        tree.root.left.right = new Node(5);
+        tree.inorder();
+    }
+}
