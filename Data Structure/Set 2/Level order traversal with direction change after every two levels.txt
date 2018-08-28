@@ -1,0 +1,88 @@
+using namespace std;
+ 
+struct Node {
+    struct Node* left;
+    int data;
+    struct Node* right;
+};
+ 
+void modifiedLevelOrder(struct Node* node)	// Function to print the level order of  given binary tree. Direction of printing  level order traversal of binary tree  
+ {					//changes after every two levels
+    if (node == NULL)
+        return;
+    if (node->left == NULL && node->right == NULL) {
+        cout << node->data;
+        return;
+    }
+    queue<Node*> myQueue;		   // Maintain a queue for normal level order traversal
+    stack<Node*> myStack;	    // Maintain a stack for printing nodes in reverse order after they are popped out from queue.
+    struct Node* temp = NULL;
+    int sz;				   // sz is used for storing the count of nodes in a level
+    int ct = 0;		   // Used for changing the direction of level order traversal
+    bool rightToLeft = false;		   // Used for changing the direction of level order traversal
+    myQueue.push(node);		   // Push root node to the queue
+    while (!myQueue.empty()) {			   // Run this while loop till queue got empty
+        ct++;
+       sz = myQueue.size();
+        for (int i = 0; i < sz; i++) {			        // Do a normal level order traversal
+            temp = myQueue.front();
+            myQueue.pop();
+            if (rightToLeft == false)	            //For printing nodes from left to right, simply print the nodes in the order in which they are being popped out from the queue.
+                cout << temp->data << " ";            
+            else			            // For printing nodes from right to left, push the nodes to stack instead of printing them.
+                myStack.push(temp);            
+            if (temp->left)
+                myQueue.push(temp->left);
+            if (temp->right)
+                myQueue.push(temp->right);
+        }
+        if (rightToLeft == true) {
+            while (!myStack.empty()) {		            // for printing the nodes in order from right to left
+                temp = myStack.top();
+                myStack.pop();
+               cout << temp->data << " ";
+            }
+        }
+        if (ct == 2) {		        //Change the direction of printing nodes after every two levels.
+            rightToLeft = !rightToLeft;
+            ct = 0;
+        }
+        cout << "\n";
+    }
+}
+ 
+Node* newNode(int data)		// Utility function to create a new tree node
+{
+    Node* temp = new Node;
+    temp->data = data;
+    temp->left = temp->right = NULL;
+    return temp;
+}
+ 
+
+int main()
+{
+    Node* root = newNode(1);
+    root->left = newNode(2);
+    root->right = newNode(3);
+    root->left->left = newNode(4);
+    root->left->right = newNode(5);
+    root->right->left = newNode(6);
+    root->right->right = newNode(7);
+    root->left->left->left = newNode(8);
+    root->left->left->right = newNode(9);
+    root->left->right->left = newNode(3);
+    root->left->right->right = newNode(1);
+    root->right->left->left = newNode(4);
+    root->right->left->right = newNode(2);
+    root->right->right->left = newNode(7);
+    root->right->right->right = newNode(2);
+    root->left->right->left->left = newNode(16);
+    root->left->right->left->right = newNode(17);
+    root->right->left->right->left = newNode(18);
+    root->right->right->left->right = newNode(19);
+ 
+    modifiedLevelOrder(root);
+ 
+    return 0;
+}
