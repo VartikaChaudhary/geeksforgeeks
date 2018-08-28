@@ -1,0 +1,47 @@
+import java.util.LinkedList;
+import java.util.Queue;
+ 
+public class GFG {
+  static class Node {
+    int data;
+    Node left;
+    Node right;
+    Node(int data) {
+      this.data = data;
+      left = null;
+      right = null;
+    }
+  }
+  static void levelOrder(Node root) {		  // Prints level order traversal line by line using two queues.
+    if (root == null)
+      return;
+    Queue q = new LinkedList();
+    q.add(root);			   // Pushing root node into the queue.
+    q.add(null);			   // Pushing delimiter into the queue.
+    while (!q.isEmpty()) {		    // Executing loop till queue becomes empty
+      Node curr = q.poll();
+      if (curr == null) {			      // condition to check the occurence of next level
+        if (!q.isEmpty()) {
+          q.add(null);
+          System.out.println();
+        }
+      } else {
+        if (curr.left != null)		       // Pushing left child current node
+          q.add(curr.left);
+        if (curr.right != null)		       // Pushing right child current node
+          q.add(curr.right);
+       System.out.print(curr.data + " ");
+      }
+    }
+  }
+ 
+  public static void main(String[] args) {
+    Node root = new Node(1);
+    root.left = new Node(2);
+    root.right = new Node(3);
+    root.left.left = new Node(4);
+    root.left.right = new Node(5);
+    root.right.right = new Node(6);
+    levelOrder(root);
+  }
+}
