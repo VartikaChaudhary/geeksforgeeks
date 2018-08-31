@@ -1,0 +1,45 @@
+import java.io.*;
+ 
+class GFG
+{
+static int pairsInSortedRotated(int arr[], int n, int x) 		// This function returns count of number of pairs with sum equals to x.
+{
+    int i;
+    for (i = 0; i < n - 1; i++)
+        if (arr[i] > arr[i + 1])
+            break;
+    int l = (i + 1) % n; 					    // l is index of minimum element.
+    int r = i;						    // r is index of maximum element.
+    int cnt = 0;
+    while (l != r)					// Find sum of pair  formed by arr[l] and arr[r] and  update l, r and  cnt accordingly.
+    {
+        if (arr[l] + arr[r] == x)				// If we find a pair with  sum x, then increment  cnt, move l and r to  next element.
+        {
+            cnt++;
+            if(l == (r - 1 + n) % n)		// This condition is required  to be checked, otherwise  l and r will cross each  other and loop will never  terminate.
+            {
+                return cnt;
+            }
+             
+            l = (l + 1) % n;
+            r = (r - 1 + n) % n;
+        }
+        else if (arr[l] + arr[r] < x)		// If current pair sum  is less, move to  the higher sum side.
+            l = (l + 1) % n;
+        else				// If current pair sum is greater, move  to the lower sum side.
+            r = (n + r - 1) % n;
+    }
+     
+    return cnt;
+}
+ 
+public static void main (String[] args) 
+{
+    int arr[] = {11, 15, 6, 7, 9, 10};
+    int sum = 16;
+    int n = arr.length;
+ 
+    System.out.println(
+            pairsInSortedRotated(arr, n, sum));
+}
+}
