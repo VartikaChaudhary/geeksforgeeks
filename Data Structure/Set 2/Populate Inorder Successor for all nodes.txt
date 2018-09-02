@@ -1,0 +1,43 @@
+class Node 
+{
+    int data;
+    Node left, right, next;
+      Node(int item) 
+    {
+        data = item;
+        left = right = next = null;
+    }
+}
+  
+class BinaryTree 
+{
+    Node root;
+    static Node next = null;
+    void populateNext(Node node) 		// Set next of p and all descendents of p by traversing them in reverse Inorder
+    {
+        if (node != null) 			// The first visited node will be the rightmost node next of the rightmost node will be NULL
+        {
+            populateNext(node.right);		// First set the next pointer in right subtree
+            node.next = next;		// Set the next as previously visited node in reverse Inorder
+            next = node;		// Change the prev for subsequent node
+            populateNext(node.left);		// Finally, set the next pointer in left subtree
+        }
+    }
+
+    public static void main(String args[]) 
+    {
+        BinaryTree tree = new BinaryTree();
+        tree.root = new Node(10);
+        tree.root.left = new Node(8);
+        tree.root.right = new Node(12);
+        tree.root.left.left = new Node(3);
+        tree.populateNext(tree.root);		        // Populates nextRight pointer in all nodes
+        Node ptr = tree.root.left.left;		      // Let us see the populated values
+        while (ptr != null) 
+        {
+            int print = ptr.next != null ? ptr.next.data : -1;		// -1 is printed if there is no successor
+            System.out.println("Next of " + ptr.data + " is: " + print);
+            ptr = ptr.next;
+        }
+    }
+}
