@@ -1,0 +1,74 @@
+using namespace std;
+struct Node {
+    int data;
+    struct Node* left, *right;
+};
+
+struct Node* getNode(int data)		// function to get a new node of a binary tree
+{
+    struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
+    new_node->data = data;
+    new_node->left = new_node->right = NULL;
+     return new_node;
+}
+
+void storeInorderTraversal(struct Node* root, vector& arr)		// function to store the inorder traversal of the binary tree in 'arr'
+{
+    if (!root)
+        return;
+    storeInorderTraversal(root->left, arr);		    // first recur on left child
+    arr.push_back(root->data);		   // then store the root's data in 'arr'
+    storeInorderTraversal(root->right, arr);		// now recur on right child
+}
+
+void replaceNodeWithSum(struct Node* root, vector arr, int* i)		// function to replace each node with the sum of its inorder predecessor and successor
+{
+    if (!root)
+        return;
+    replaceNodeWithSum(root->left, arr, i);		   // first recur on left child
+    root->data = arr[*i - 1] + arr[*i + 1];			// replace node's data with the sum of its inorder predecessor and successor
+    ++*i;		  		 // move 'i' to point to the next 'arr' element
+    replaceNodeWithSum(root->right, arr, i);		// now recur on right child
+}
+ 
+void replaceNodeWithSumUtil(struct Node* root)	// Utility function to replace each node in binary tree with the sum of its inorder predecessor and successor
+{
+    if (!root)
+        return;
+     vector arr;
+    arr.push_back(0);		// store the value of inorder predecessor for the leftmost leaf
+    storeInorderTraversal(root, arr);		// store the inoder traversal of the tree in 'arr'
+    arr.push_back(0);  			// store the value of inorder successor for the rightmost leaf
+    int i = 1;			// replace each node with the required sum
+    replaceNodeWithSum(root, arr, &i);
+}
+
+void preorderTraversal(struct Node* root)		// function to print the preorder traversal of a binary tree
+{
+    if (!root)
+        return;
+    cout << root->data << " ";
+    preorderTraversal(root->left);		   // then recur on left subtree
+    preorderTraversal(root->right);		// now recur on right subtree
+}
+
+int main()
+{
+    struct Node* root = getNode(1); 		// binary tree formation
+    root->left = getNode(2);        
+    root->right = getNode(3);       
+    root->left->left = getNode(4);  
+    root->left->right = getNode(5);
+    root->right->left = getNode(6);
+    root->right->right = getNode(7);
+ 
+    cout << "Preorder Traversal before tree modification:n";
+    preorderTraversal(root);
+ 
+    replaceNodeWithSumUtil(root);
+ 
+    cout << "\nPreorder Traversal after tree modification:n";
+    preorderTraversal(root);
+ 
+    return 0;
+}
