@@ -1,0 +1,59 @@
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Stack;
+  
+class Node 
+{
+    int data;
+    Node left, right;
+    Node(int item) 
+    {
+        data = item;
+        left = right;
+    }
+}
+  
+class BinaryTree 
+{
+    Node root;
+    void reverseLevelOrder(Node node) 		   // Given a binary tree, print its nodes in reverse level order
+    {
+        Stack S = new Stack();
+        Queue Q = new LinkedList();
+        Q.add(node);
+        while (Q.isEmpty() == false) 	        // Do something like normal level order traversal order.Following are the differences with normal level order traversal
+        {					        // 1) Instead of printing a node, we push the node to stack
+					          // 2) Right subtree is visited before left subtree
+            node = Q.peek();		// Dequeue node and make it root 
+            Q.remove();
+            S.push(node);
+            if (node.right != null)			          // Enqueue right child
+                Q.add(node.right); 
+            if (node.left != null)			            // Enqueue left child
+                Q.add(node.left);
+        }
+        while (S.empty() == false) 			      // Now pop all items from stack one by one and print them
+        {
+            node = S.peek();
+            System.out.print(node.data + " ");
+            S.pop();
+        }
+    }
+  
+  
+    public static void main(String args[]) 
+    {
+        BinaryTree tree = new BinaryTree();
+        tree.root = new Node(1);
+        tree.root.left = new Node(2);
+        tree.root.right = new Node(3);
+        tree.root.left.left = new Node(4);
+        tree.root.left.right = new Node(5);
+        tree.root.right.left = new Node(6);
+        tree.root.right.right = new Node(7);
+  
+        System.out.println("Level Order traversal of binary tree is :");
+        tree.reverseLevelOrder(tree.root);
+  
+    }
+}
