@@ -1,0 +1,60 @@
+			// C code to modify binary tree for traversal using only right pointer
+#include <iostream>
+#include <stack>
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* left;
+    struct Node* right;
+};
+
+// function that allocates a new node with the given data and NULL left and right pointers.
+struct Node* newNode(int data)
+{
+    struct Node* node = new struct Node;
+    node->data = data;
+    node->left = NULL;
+    node->right = NULL;
+    return (node);
+}
+
+struct Node* modifytree(struct Node* root)			// Function to modify tree
+{
+    struct Node* right = root->right;
+    struct Node* rightMost = root;
+
+    if (root->left) {			    // if the left tree exists
+        rightMost = modifytree(root->left);		        // get the right-most of the original left subtree
+        root->right = root->left;			        // set root right to left subtree
+        root->left = NULL;
+    }
+    if (!right) 			    // if the right subtree does not exists we are done!
+        return rightMost;
+    rightMost->right = right;		    // set right pointer of right-most of the original left subtree
+    rightMost = modifytree(right);			    // modify the rightsubtree
+    return rightMost;
+}
+
+void printpre(struct Node* root)			// printing using right pointer only
+{
+    while (root != NULL) {
+        cout << root->data << " ";
+        root = root->right;
+    }
+}
+
+int main()
+{
+    struct Node* root = newNode(10);
+    root->left = newNode(8);
+    root->right = newNode(2);
+    root->left->left = newNode(3);
+    root->left->right = newNode(5);
+
+    modifytree(root);
+    printpre(root);
+
+    return 0;
+}
