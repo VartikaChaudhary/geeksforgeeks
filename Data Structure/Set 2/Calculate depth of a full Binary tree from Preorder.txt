@@ -1,0 +1,29 @@
+			// C++ program to find height of full binary tree using preorder
+#include <bits/stdc++.h>
+ 
+int findDepthRec(char tree[], int n, int& index)	// function to return max of left subtree height or right subtree height
+{
+    if (index >= n || tree[index] == 'l')
+        return 0;
+    index++;		    // calc height of left subtree (In preorder left subtree is processed before right)
+    int left = findDepthRec(tree, n, index);
+    index++;			    // calc height of right subtree
+    int right = findDepthRec(tree, n, index);
+    return max(left, right) + 1;
+}
+ 
+int findDepth(char tree[], int n)		// Wrapper over findDepthRec()
+{
+    int index = 0;
+    findDepthRec(tree, n, index);
+}
+ 
+int main()
+{
+    char tree[] = "nlnnlll";
+    int n = strlen(tree);
+ 
+    cout << findDepth(tree, n) << endl;
+ 
+    return 0;
+}
