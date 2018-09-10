@@ -1,0 +1,75 @@
+#include <bits/stdc++.h>
+using namespace std;
+ 
+struct Node	// A binary tree node has data, pointer to left child and a pointer to right child
+{
+    int data;
+    Node *left, *right;
+};
+ 
+Node* newNode(int data)		// Helper function that allocates a new node with the given data and NULL left and right pointers.
+{
+    Node* node = new Node;
+    node->data = data;
+    node->right = node->left = NULL;
+    return node;
+}
+ 
+void printSpecificLevelOrderUtil(Node* root, stack<Node*> &s)
+{
+    if (root == NULL)
+        return;
+    queue q;		    // Create a queue and enqueue left and right children of root
+ 
+    q.push(root->left);
+    q.push(root->right);
+    Node *first = NULL, *second = NULL;		    // We process two nodes at a time, so we need two variables to store two front items of queue
+    while (!q.empty())		   // traversal loop
+    {
+        first = q.front();			        // Pop two items from queue
+        q.pop();
+        second = q.front();
+        q.pop();
+        s.push(second->left);			        // Push first and second node's chilren in reverse order
+        s.push(first->right);
+        s.push(second->right);
+        s.push(first->left);
+ 
+        if (first->left->left != NULL)
+        {
+            q.push(first->right);
+            q.push(second->left);
+            q.push(first->left);
+            q.push(second->right);
+        }
+    }
+}
+ 
+void printSpecificLevelOrder(Node* root)		// Given a perfect binary tree, print its nodes in specific level order
+{
+    stack s;			   //create a stack and push root
+    s.push(root);		   //Push level 1 and level 2 nodes in stack
+    if (root->left != NULL)		    // Since it is perfect Binary Tree, right is not checked
+    {
+        s.push(root->right);
+        s.push(root->left);
+    }
+    if (root->left->left != NULL)		    // Do anything more if there are nodes at next level in given perfect Binary Tree
+        printSpecificLevelOrderUtil(root, s);
+    while (!s.empty())			    // Finally pop all Nodes from stack and prints them.
+    {
+        cout << s.top()->data << " ";
+        s.pop();
+    }
+}
+ 
+
+int main()
+{
+    Node* root = newNode(1);		    // Perfect Binary Tree of Height 4
+    root->left = newNode(2);
+    root->right = newNode(3);
+     cout << "Specific Level Order traversal of binary tree is \n";
+    printSpecificLevelOrder(root);
+    return 0;
+}
