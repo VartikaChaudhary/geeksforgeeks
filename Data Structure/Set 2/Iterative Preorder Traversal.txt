@@ -1,0 +1,58 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <iostream>
+#include <stack>
+ 
+struct node
+{
+    int data;
+    struct node* left;
+    struct node* right;
+};
+ 
+struct node* newNode(int data)		// Helper function that allocates a new node with the given data and NULL left and right  pointers.
+{
+    struct node* node = new struct node;
+    node->data = data;
+    node->left = NULL;
+    node->right = NULL;
+    return(node);
+}
+ 
+void iterativePreorder(node *root)		// An iterative process to print preorder traversal of Binary tree
+{
+    if (root == NULL)		    // Base Case
+       return;
+ 
+    stack<node *> nodeStack;			   // Create an empty stack and push root to it
+    nodeStack.push(root);
+ 
+ 				   /* Pop all items one by one. Do following for every popped item
+					       a) print it
+					       b) push its right child
+					       c) push its left child
+				    Note that right child is pushed first so that left is processed first */
+    while (nodeStack.empty() == false)
+    {
+        struct node *node = nodeStack.top();		   // Pop the top item from stack and print it
+        printf ("%d ", node->data);
+        nodeStack.pop();
+ 
+        if (node->right)			       // Push right and left children of the popped node to stack
+            nodeStack.push(node->right);
+        if (node->left)
+            nodeStack.push(node->left);
+    }
+}
+ 
+int main()
+{
+  struct node *root = newNode(10);
+  root->left        = newNode(8);
+  root->right       = newNode(2);
+  root->left->left  = newNode(3);
+  root->left->right = newNode(5);
+  root->right->left = newNode(2);
+  iterativePreorder(root);
+  return 0;
+}
