@@ -1,0 +1,85 @@
+			// C program for Morris Preorder traversal
+#include <stdio.h>
+#include <stdlib.h>
+ 
+struct node
+{
+    int data;
+    struct node *left, *right;
+};
+ 
+struct node* newNode(int data)				// Helper function that allocates a new node with the given data and NULL left and right pointers.
+{
+    struct node* temp = (struct node*) malloc(sizeof(struct node));
+    temp->data = data;
+    temp->left = temp->right = NULL;
+    return temp;
+}
+ 
+void morrisTraversalPreorder(struct node* root)		// Preorder traversal without recursion and without stack
+{
+    while (root)
+    {
+        if (root->left == NULL)			        // If left child is null, print the current node data. Move to right child.
+        {
+            printf( "%d ", root->data );
+            root = root->right;
+        }
+        else
+        {
+            struct node* current = root->left;		            // Find inorder predecessor
+            while (current->right && current->right != root)
+                current = current->right;
+            if (current->right == root)			            // If the right child of inorder predecessor already points to this node
+            {
+                current->right = NULL;
+                root = root->right;
+            }
+            else		            // If right child doesn't point to this node, then print this node and make right child point to this node
+            {
+                printf("%d ", root->data);
+                current->right = root;
+                root = root->left;
+            }
+        }
+    }
+}
+
+void preorder(struct node* root)		// Function for sStandard preorder traversal
+{
+    if (root)
+    {
+        printf( "%d ", root->data);
+        preorder(root->left);
+        preorder(root->right);
+    }
+}
+ 
+
+int main()
+{
+    struct node* root = NULL;
+ 
+    root = newNode(1);
+    root->left = newNode(2);
+    root->right = newNode(3);
+ 
+    root->left->left = newNode(4);
+    root->left->right = newNode(5);
+ 
+    root->right->left = newNode(6);
+    root->right->right = newNode(7);
+ 
+    root->left->left->left = newNode(8);
+    root->left->left->right = newNode(9);
+ 
+    root->left->right->left = newNode(10);
+    root->left->right->right = newNode(11);
+ 
+    morrisTraversalPreorder(root);
+ 
+    printf("\n");
+    preorder(root);
+ 
+    return 0;
+}
